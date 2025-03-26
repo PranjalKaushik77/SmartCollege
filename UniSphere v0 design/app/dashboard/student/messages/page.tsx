@@ -251,5 +251,16 @@ export default function StudentMessagesPage() {
                   <div className="bg-secondary p-3 rounded-lg">
                     <p className="text-sm">I've attached some notes with specific suggestions. Let me know if you have any questions.</p>
                   </div>
-                  <div className="mt-\
-
+                  <div className="mt-\[1px\] text-xs text-muted-foreground">10:40 AM</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+          <div className="p-4 border-t">
+            <Input type="text" placeholder="Type a message..." />
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+}
