@@ -79,7 +79,6 @@ export default function DashboardLayout({
         { href: `/dashboard/${role}/students`, label: "Students", icon: Users },
         { href: `/dashboard/${role}/faculty`, label: "Faculty", icon: Users },
         { href: `/dashboard/${role}/courses`, label: "Courses", icon: BookOpen },
-        { href: `/dashboard/${role}/exams`, label: "Examinations", icon: FileText },
         { href: `/dashboard/${role}/reports`, label: "Reports", icon: BarChart },
         { href: `/dashboard/${role}/settings`, label: "Settings", icon: Settings },
       ]

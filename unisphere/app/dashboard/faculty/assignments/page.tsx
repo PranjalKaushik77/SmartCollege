@@ -18,6 +18,9 @@ import {
   Download,
   Upload,
   MoreHorizontal,
+  Eye,
+  Edit,
+  Trash2,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -38,6 +41,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Progress } from "@/components/ui/progress"
 
 export default function FacultyAssignmentsPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -49,7 +53,8 @@ export default function FacultyAssignmentsPage() {
     {
       id: 1,
       title: "Algorithm Analysis",
-      course: "Computer Science 101",
+      course: "CS101",
+      courseName: "Computer Science 101",
       dueDate: "April 5, 2025",
       status: "active",
       submissions: 12,
@@ -58,64 +63,78 @@ export default function FacultyAssignmentsPage() {
     },
     {
       id: 2,
-      title: "Calculus Problem Set",
-      course: "Mathematics 202",
+      title: "Data Structures Implementation",
+      course: "CS202",
+      courseName: "Data Structures and Algorithms",
       dueDate: "April 8, 2025",
       status: "active",
       submissions: 8,
-      totalStudents: 24,
-      description: "Complete problems 1-20 in Chapter 5.",
+      totalStudents: 26,
+      description: "Implement a binary search tree and analyze its performance.",
     },
     {
       id: 3,
-      title: "Lab Report: Forces and Motion",
-      course: "Physics 101",
+      title: "Neural Network Design",
+      course: "CS305",
+      courseName: "Artificial Intelligence",
       dueDate: "April 12, 2025",
       status: "active",
       submissions: 15,
       totalStudents: 28,
-      description: "Write a comprehensive lab report on the forces and motion experiment.",
+      description: "Design and implement a simple neural network for image classification.",
     },
     {
       id: 4,
-      title: "Literary Analysis Essay",
-      course: "English Literature",
+      title: "Responsive Web Application",
+      course: "CS210",
+      courseName: "Web Development",
       dueDate: "April 15, 2025",
       status: "active",
       submissions: 5,
       totalStudents: 30,
-      description: "Write a 1500-word analysis of the themes in 'To Kill a Mockingbird'.",
+      description: "Create a responsive web application using modern frameworks.",
     },
     {
       id: 5,
-      title: "Programming Project: Database System",
-      course: "Computer Science 101",
+      title: "Final Project Proposal",
+      course: "CS101",
+      courseName: "Computer Science 101",
       dueDate: "April 20, 2025",
       status: "active",
       submissions: 3,
       totalStudents: 32,
-      description: "Develop a simple database management system using the concepts learned in class.",
+      description: "Submit a proposal for your final project including objectives and methodology.",
     },
     {
       id: 6,
-      title: "Research Methodology",
-      course: "Research Methods",
+      title: "Midterm Exam",
+      course: "CS101",
+      courseName: "Computer Science 101",
       dueDate: "March 25, 2025",
       status: "past",
-      submissions: 22,
-      totalStudents: 25,
-      description: "Submit a research proposal on a topic of your choice.",
+      submissions: 32,
+      totalStudents: 32,
+      description: "Comprehensive exam covering all topics from weeks 1-7.",
     },
     {
       id: 7,
-      title: "Midterm Paper",
-      course: "English Literature",
+      title: "Programming Quiz",
+      course: "CS202",
+      courseName: "Data Structures and Algorithms",
       dueDate: "March 15, 2025",
       status: "past",
-      submissions: 28,
-      totalStudents: 30,
-      description: "Write a comparative analysis of two literary works discussed in class.",
+      submissions: 24,
+      totalStudents: 26,
+      description: "Quiz on basic programming concepts and algorithms.",
     },
+  ]
+
+  // Mock courses data
+  const courses = [
+    { id: "CS101", name: "Computer Science 101" },
+    { id: "CS202", name: "Data Structures and Algorithms" },
+    { id: "CS305", name: "Artificial Intelligence" },
+    { id: "CS210", name: "Web Development" },
   ]
 
   const filteredAssignments = assignments.filter(
@@ -129,8 +148,6 @@ export default function FacultyAssignmentsPage() {
   const activeAssignments = filteredAssignments.filter((a) => a.status === "active")
   const pastAssignments = filteredAssignments.filter((a) => a.status === "past")
   const draftAssignments = filteredAssignments.filter((a) => a.status === "draft")
-
-  const courses = [...new Set(assignments.map((a) => a.course))]
 
   return (
     <div className="space-y-6">
@@ -217,8 +234,8 @@ export default function FacultyAssignmentsPage() {
           <SelectContent>
             <SelectItem value="all">All Courses</SelectItem>
             {courses.map((course) => (
-              <SelectItem key={course} value={course}>
-                {course}
+              <SelectItem key={course.id} value={course.id}>
+                {course.id}
               </SelectItem>
             ))}
           </SelectContent>
@@ -259,7 +276,9 @@ export default function FacultyAssignmentsPage() {
                             <p className="font-medium">{assignment.title}</p>
                             <Badge className="mt-1 md:mt-0">Active</Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">{assignment.course}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {assignment.course} - {assignment.courseName}
+                          </p>
                           <p className="text-sm">{assignment.description}</p>
                           <div className="flex flex-col md:flex-row md:items-center justify-between mt-2">
                             <div className="flex items-center">
@@ -271,6 +290,12 @@ export default function FacultyAssignmentsPage() {
                                 Submissions: {assignment.submissions}/{assignment.totalStudents}
                               </span>
                             </div>
+                          </div>
+                          <div className="mt-2">
+                            <Progress
+                              value={(assignment.submissions / assignment.totalStudents) * 100}
+                              className="h-2"
+                            />
                           </div>
                         </div>
                       </div>
@@ -284,17 +309,33 @@ export default function FacultyAssignmentsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>Edit Assignment</DropdownMenuItem>
-                            <DropdownMenuItem>Extend Deadline</DropdownMenuItem>
-                            <DropdownMenuItem>Send Reminder</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Assignment
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Calendar className="mr-2 h-4 w-4" />
+                              Extend Deadline
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <AlertCircle className="mr-2 h-4 w-4" />
+                              Send Reminder
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-destructive">Delete Assignment</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete Assignment
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <Button size="sm" variant="outline">
+                          <Eye className="mr-2 h-4 w-4" />
                           View Submissions
                         </Button>
-                        <Button size="sm">Manage</Button>
+                        <Button size="sm">
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Grade
+                        </Button>
                       </div>
                     </div>
                   ))
@@ -335,7 +376,9 @@ export default function FacultyAssignmentsPage() {
                               Completed
                             </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">{assignment.course}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {assignment.course} - {assignment.courseName}
+                          </p>
                           <p className="text-sm">{assignment.description}</p>
                           <div className="flex flex-col md:flex-row md:items-center justify-between mt-2">
                             <div className="flex items-center">
@@ -355,7 +398,10 @@ export default function FacultyAssignmentsPage() {
                           <Download className="mr-2 h-4 w-4" />
                           Export
                         </Button>
-                        <Button size="sm">View Details</Button>
+                        <Button size="sm">
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                        </Button>
                       </div>
                     </div>
                   ))
@@ -396,15 +442,21 @@ export default function FacultyAssignmentsPage() {
                               Draft
                             </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">{assignment.course}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {assignment.course} - {assignment.courseName}
+                          </p>
                           <p className="text-sm">{assignment.description}</p>
                         </div>
                       </div>
                       <div className="flex mt-4 md:mt-0 space-x-2">
                         <Button size="sm" variant="outline">
+                          <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </Button>
-                        <Button size="sm">Publish</Button>
+                        <Button size="sm">
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Publish
+                        </Button>
                       </div>
                     </div>
                   ))
@@ -440,8 +492,8 @@ export default function FacultyAssignmentsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   {courses.map((course) => (
-                    <SelectItem key={course} value={course}>
-                      {course}
+                    <SelectItem key={course.id} value={course.id}>
+                      {course.id} - {course.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
